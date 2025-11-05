@@ -1,7 +1,13 @@
+FROM maven:3.9-ibm-semeru-21-jammy AS build
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
+
 FROM eclipse-temurin:21-jre AS builder
 WORKDIR /builder
 
-COPY target/*.jar application.jar
+ARG JAR_FILE=/app/target/*.jar
+COPY --from=build ${JAR_FILE} application.jar
 RUN java -Djarmode=tools -jar application.jar extract --layers --destination extracted
 
 FROM eclipse-temurin:21-jre
