@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
@@ -43,6 +44,7 @@ public class DouyinService {
      * @return 视频信息
      */
     public Mono<DouyinVideoResponse> extractVideo(String shareUrl) {
+        Assert.hasText(shareUrl, "分享链接不能为空.");
         return webClient.get()
                 .uri(shareUrl)
                 .retrieve()
